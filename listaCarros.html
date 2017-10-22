@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Exemplo</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<style type="text/css">
+		li{list-style: none;}
+		.inner{width: 50%; padding: 3% 4%; margin-right: auto; margin-left: auto; 
+			background-color: #f9f9f9; text-align: center;}
+		#caixa{border: 9px solid #f1f1f1;}
+		#box{background-color: #f1f1f1; text-align: center;}
+		.table{background-color: #fff; text-align: left;}
+		#btnExcluir{float: right;}
+	</style>
+</head>
+<body>
+	<div class="inner" id="caixa" style="margin-top: 2%;">
+		<input type="text" name="marca" id="marca" placeholder="Marca">
+		<input type="text" name="modelo" id="modelo" placeholder="Modelo">
+		<input type="button" name="btnCriar" id="btnCriar" value="Criar Carro" onclick="novo()">
+	</div>
+	<div class="inner" id="box">
+		<h2>Carros</h2>
+		<table class="table table-bordered" id="tabela">
+			<thead>
+				<tr>
+					<th>Marca</th>
+					<th>Modelo</th>
+					<th>Ação <input type="checkbox" name="chkAcao" id="chakAcao" style="float: right;"></th>
+				</tr>
+			</thead>
+			<tbody id="tBody">
+				<tr id="row"></tr>
+			</tbody>
+		</table>
+		<input type="button" name="btnExcluir" id="btnExcluir" onclick="" value="Escluir">
+	</div>
+	<script type="text/javascript">
+		var arrCarros = [];
+		var x = 0;
+		var y;
+		var contador = 0;
+
+
+		var criarCarro = function(marca, modelo){
+			var check = document.createElement("INPUT"); check.setAttribute('type', 'checkbox');
+				check.setAttribute('style', 'float: right;');
+				check.setAttribute('id', 'chk'+contador);
+			return{
+				marca: marca,
+				modelo: modelo,
+				editar: check
+			};
+		};
+
+		var novo = function(){
+			var tBody = document.getElementById('tBody');
+			var row = document.createElement('tr'); row.setAttribute("id", x);
+			var tdMarca = document.createElement("td");
+			var tdModelo = document.createElement("td");
+			var tdEditar = document.createElement("td");
+			var marca = document.getElementById("marca").value;
+			var modelo = document.getElementById("modelo").value;
+			//var editar = document.getElementById("chkAcao").value;
+ 			
+			tBody.appendChild(row);
+			
+			if (marca === '' | modelo ===''){
+			  alert("Você deve preencher os campos: Marca e Modelo");
+			}else{
+			  var id = 0;
+			  arrCarros.push(criarCarro(marca, modelo));
+			  for (i = 0; i < arrCarros.length; i++){
+			  	y = arrCarros[i];
+			  }
+			  tdMarca.appendChild(document.createTextNode(y.marca));
+			  tdModelo.appendChild(document.createTextNode(y.modelo));
+			  tdEditar.appendChild(y.editar);
+
+			  document.getElementById(x).appendChild(tdMarca);
+			  document.getElementById(x).appendChild(tdModelo);
+			  document.getElementById(x).appendChild(tdEditar);
+			}
+			  document.getElementById("marca").value = "";
+			  document.getElementById("modelo").value = "";
+			  x++;
+			  contador = contador+1;
+		}
+	</script>
+</body>
+</html>
