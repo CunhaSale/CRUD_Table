@@ -2,15 +2,17 @@
 <html>
 <head>
 	<title>Exemplo</title>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="lib/bootstrap/css/bootstrap.css">
 	<style type="text/css">
-		li{list-style: none;}
+		li{list-style: none; box-sizing: border-box;}
 		.inner{width: 50%; padding: 3% 4%; margin-right: auto; margin-left: auto; 
 			background-color: #f9f9f9; text-align: center;}
 		#caixa{border: 9px solid #f1f1f1;}
 		#box{background-color: #f1f1f1; text-align: center;}
 		.table{background-color: #fff; text-align: left;}
 		#btnExcluir{float: right;}
+		.edit{display: none;}
+		input[type="checkbox"]{margin-top: 7px;}
 	</style>
 </head>
 <body>
@@ -26,26 +28,31 @@
 				<tr>
 					<th>Marca</th>
 					<th>Modelo</th>
-					<th>Ação <input type="checkbox" name="chkAcao" id="chakAcao" style="float: right;"></th>
+					<th>Ação <input type="checkbox" name="chkAcao" id="chkAcao" onclick="checkAll()" style="float: right;"></th>
 				</tr>
 			</thead>
 			<tbody id="tBody">
-				<tr id="row"></tr>
+		
 			</tbody>
 		</table>
-		<input type="button" name="btnExcluir" id="btnExcluir" onclick="" value="Escluir">
+		<input type="button" name="btnExcluir" id="btnExcluir" onclick="" value="Excluir">
 	</div>
 	<script type="text/javascript">
 		var arrCarros = [];
-		var x = 0;
-		var y;
-		var contador = 0;
-
+		var carro;
+		var contadorIdTr = 0;
+		var contadorIdChk = 0;
 
 		var criarCarro = function(marca, modelo){
-			var check = document.createElement("INPUT"); check.setAttribute('type', 'checkbox');
+			var check = document.createElement("INPUT"); 
+				check.setAttribute('type', 'checkbox'); 
 				check.setAttribute('style', 'float: right;');
-				check.setAttribute('id', 'chk'+contador);
+				check.setAttribute('id', 'chk'+contadorIdChk);
+				check.setAttribute('onclick', 'editar('+contadorIdChk+')');
+				check.setAttribute('name', 'on');
+				//Link-Edit
+
+
 			return{
 				marca: marca,
 				modelo: modelo,
@@ -55,37 +62,68 @@
 
 		var novo = function(){
 			var tBody = document.getElementById('tBody');
-			var row = document.createElement('tr'); row.setAttribute("id", x);
+			var row = document.createElement('tr'); row.setAttribute("id", "trow"+contadorIdTr);
 			var tdMarca = document.createElement("td");
 			var tdModelo = document.createElement("td");
-			var tdEditar = document.createElement("td");
+			var tdEditar = document.createElement("td"); tdEditar.setAttribute('id', 'tdCheck'+contadorIdTr);
 			var marca = document.getElementById("marca").value;
 			var modelo = document.getElementById("modelo").value;
-			//var editar = document.getElementById("chkAcao").value;
+			//
+			var editar = document.createElement('a'); editar.setAttribute('id', 'edit'+contadorIdTr);
+			var editarValue = document.createTextNode('Editar');
+				editar.setAttribute('href', '#');
+				editar.setAttribute('class', 'edit');
+				editar.setAttribute('style', 'float: left');
+				//editar.setAttribute('style', 'display: none'); 
  			
+ 			editar.appendChild(editarValue);
 			tBody.appendChild(row);
+			tdEditar.appendChild(editar);
 			
 			if (marca === '' | modelo ===''){
 			  alert("Você deve preencher os campos: Marca e Modelo");
 			}else{
-			  var id = 0;
 			  arrCarros.push(criarCarro(marca, modelo));
-			  for (i = 0; i < arrCarros.length; i++){
-			  	y = arrCarros[i];
+			  for (var i = 0; i < arrCarros.length; i++){
+			  	carro = arrCarros[i];
 			  }
-			  tdMarca.appendChild(document.createTextNode(y.marca));
-			  tdModelo.appendChild(document.createTextNode(y.modelo));
-			  tdEditar.appendChild(y.editar);
+			  tdMarca.appendChild(document.createTextNode(carro.marca));
+			  tdModelo.appendChild(document.createTextNode(carro.modelo));
+			  tdEditar.appendChild(carro.editar);
 
-			  document.getElementById(x).appendChild(tdMarca);
-			  document.getElementById(x).appendChild(tdModelo);
-			  document.getElementById(x).appendChild(tdEditar);
+			  document.getElementById("trow"+contadorIdTr).appendChild(tdMarca);
+			  document.getElementById("trow"+contadorIdTr).appendChild(tdModelo);
+			  document.getElementById("trow"+contadorIdTr).appendChild(tdEditar);
 			}
 			  document.getElementById("marca").value = "";
 			  document.getElementById("modelo").value = "";
-			  x++;
-			  contador = contador+1;
-		}
+			  contadorIdTr++;
+			  contadorIdChk++;
+		};
+
+		var checkAll = function(){
+			var chkAcao = document.getElementById('chkAcao');
+			for (var id = 0; id < arrCarros.length; id++){
+				document.getElementById('chk'+id).checked = chkAcao.checked;
+				if(document.getElementById('chk'+id).name == 'on'){
+					document.getElementById('edit'+id).style.display = 'block';
+					document.getElementById('chk'+id).setAttribute('name', 'off');
+				}else{
+					document.getElementById('edit'+id).style.display = 'none';
+					document.getElementById('chk'+id).setAttribute('name', 'on');
+				};
+			};
+		};
+
+		var editar = function(id){
+			if(document.getElementById('chk'+id).name == 'on'){
+				document.getElementById('edit'+id).style.display = 'block';
+				document.getElementById('chk'+id).setAttribute('name', 'off');
+			}else{
+				document.getElementById('edit'+id).style.display = 'none';
+				document.getElementById('chk'+id).setAttribute('name', 'on');
+			};
+		};
 	</script>
 </body>
 </html>
