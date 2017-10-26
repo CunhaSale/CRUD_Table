@@ -35,7 +35,7 @@
 		
 			</tbody>
 		</table>
-		<input type="button" name="btnExcluir" id="btnExcluir" onclick="" value="Excluir">
+		<input type="button" name="btnExcluir" id="btnExcluir" onclick="excluirCarro()" value="Excluir">
 	</div>
 	<script type="text/javascript">
 		var arrCarros = [];
@@ -49,10 +49,7 @@
 				check.setAttribute('style', 'float: right;');
 				check.setAttribute('id', 'chk'+contadorIdChk);
 				check.setAttribute('onclick', 'editar('+contadorIdChk+')');
-				check.setAttribute('name', 'on');
-				//Link-Edit
-
-
+				check.setAttribute('name', 'off');
 			return{
 				marca: marca,
 				modelo: modelo,
@@ -74,56 +71,60 @@
 				editar.setAttribute('href', '#');
 				editar.setAttribute('class', 'edit');
 				editar.setAttribute('style', 'float: left');
-				//editar.setAttribute('style', 'display: none'); 
- 			
+
  			editar.appendChild(editarValue);
 			tBody.appendChild(row);
 			tdEditar.appendChild(editar);
 			
 			if (marca === '' | modelo ===''){
-			  alert("Você deve preencher os campos: Marca e Modelo");
+				alert("Você deve preencher os campos: Marca e Modelo");
 			}else{
-			  arrCarros.push(criarCarro(marca, modelo));
-			  for (var i = 0; i < arrCarros.length; i++){
-			  	carro = arrCarros[i];
-			  }
-			  tdMarca.appendChild(document.createTextNode(carro.marca));
-			  tdModelo.appendChild(document.createTextNode(carro.modelo));
-			  tdEditar.appendChild(carro.editar);
+				arrCarros.push(criarCarro(marca, modelo));
+				for (var i = 0; i < arrCarros.length; i++){
+			  		carro = arrCarros[i];
+			  	}
+				tdMarca.appendChild(document.createTextNode(carro.marca));
+				tdModelo.appendChild(document.createTextNode(carro.modelo));
+				tdEditar.appendChild(carro.editar);
 
-			  document.getElementById("trow"+contadorIdTr).appendChild(tdMarca);
-			  document.getElementById("trow"+contadorIdTr).appendChild(tdModelo);
-			  document.getElementById("trow"+contadorIdTr).appendChild(tdEditar);
+			  	document.getElementById("trow"+contadorIdTr).appendChild(tdMarca);
+			  	document.getElementById("trow"+contadorIdTr).appendChild(tdModelo);
+			  	document.getElementById("trow"+contadorIdTr).appendChild(tdEditar);
 			}
-			  document.getElementById("marca").value = "";
-			  document.getElementById("modelo").value = "";
-			  contadorIdTr++;
-			  contadorIdChk++;
+			document.getElementById("marca").value = "";
+		    document.getElementById("modelo").value = "";
+	   	    contadorIdTr++;
+		    contadorIdChk++;
 		};
 
 		var checkAll = function(){
 			var chkAcao = document.getElementById('chkAcao');
 			for (var id = 0; id < arrCarros.length; id++){
 				document.getElementById('chk'+id).checked = chkAcao.checked;
-				if(document.getElementById('chk'+id).name == 'on'){
-					document.getElementById('edit'+id).style.display = 'block';
-					document.getElementById('chk'+id).setAttribute('name', 'off');
-				}else{
-					document.getElementById('edit'+id).style.display = 'none';
-					document.getElementById('chk'+id).setAttribute('name', 'on');
-				};
+				document.getElementById('edit'+id).style.display = document.getElementById('chk'+id).checked?'block':'none';
+				document.getElementById('chk'+id).name = document.getElementById('chk'+id).checked?'on':'off';
 			};
 		};
 
 		var editar = function(id){
-			if(document.getElementById('chk'+id).name == 'on'){
+			if(document.getElementById('chk'+id).name === 'off'){
 				document.getElementById('edit'+id).style.display = 'block';
-				document.getElementById('chk'+id).setAttribute('name', 'off');
+				document.getElementById('chk'+id).setAttribute('name', 'on');
 			}else{
 				document.getElementById('edit'+id).style.display = 'none';
-				document.getElementById('chk'+id).setAttribute('name', 'on');
+				document.getElementById('chk'+id).setAttribute('name', 'off');
+			};
+		};
+
+		var excluirCarro = function(){
+			for (var w = 0; w < arrCarros.length; w++){
+				var linha = document.getElementById('trow'+w);
+				if(document.getElementById('chk'+w).name === 'on'){
+					document.getElementById('tBody').removeChild(linha);
+				};
 			};
 		};
 	</script>
 </body>
 </html>
+
