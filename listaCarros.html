@@ -69,8 +69,10 @@
 			var editar = document.createElement('a'); editar.setAttribute('id', 'edit'+contadorIdTr);
 			var editarValue = document.createTextNode('Editar');
 				editar.setAttribute('href', '#');
-				editar.setAttribute('class', 'edit');
+				editar.setAttribute('name', 'off');
 				editar.setAttribute('style', 'float: left');
+				editar.setAttribute('class', 'edit');
+				editar.setAttribute('onclick', 'editarCampo('+contadorIdTr+')');
 
  			editar.appendChild(editarValue);
 			tBody.appendChild(row);
@@ -83,6 +85,8 @@
 				for (var i = 0; i < arrCarros.length; i++){
 			  		carro = arrCarros[i];
 			  	}
+			  	tdMarca.setAttribute('id', 'tdMarca'+contadorIdTr);
+			  	tdModelo.setAttribute('id', 'tdModelo'+contadorIdTr);
 				tdMarca.appendChild(document.createTextNode(carro.marca));
 				tdModelo.appendChild(document.createTextNode(carro.modelo));
 				tdEditar.appendChild(carro.editar);
@@ -118,12 +122,35 @@
 
 		var excluirCarro = function(){
 			for (var w = 0; w < arrCarros.length; w++){
-				var linha = document.getElementById('trow'+w);
 				if(document.getElementById('chk'+w).name === 'on'){
-					document.getElementById('tBody').removeChild(linha);
+					console.log(arrCarros.indexOf(arrCarros[w]));
 				};
 			};
 		};
+
+		var editarCampo = function(id){
+			var campoMarca = document.getElementById("tdMarca"+id).innerHTML;
+			var campoModelo = document.getElementById('tdModelo'+id).innerHTML;
+			if (document.getElementById('edit'+id).name === 'off'){
+				document.getElementById('tdMarca'+id).setAttribute('contenteditable', true);
+				document.getElementById('trow'+id).setAttribute('style', 'background-color: #FFF5EE');
+				document.getElementById('tdModelo'+id).setAttribute('contenteditable', true);
+				document.getElementById('edit'+id).childNodes[0].nodeValue = 'OK';
+				document.getElementById('edit'+id).setAttribute('name', 'on');
+			}else if (campoMarca === '' | campoModelo ===''){ 
+					alert("Você deve preencher os campos: Marca e Modelo");
+			}else{
+				//arrCarros.splice(arrCarros.indexOf(arrCarros[i]), 1, campoMarca);
+				document.getElementById('tdMarca'+id).setAttribute('contenteditable', false);
+				document.getElementById('trow'+id).setAttribute('style', 'background-color: #fff');
+				document.getElementById('tdModelo'+id).setAttribute('contenteditable', false);
+				document.getElementById('edit'+id).childNodes[0].nodeValue = 'Editar';
+				document.getElementById('edit'+id).setAttribute('name', 'off');
+				document.getElementById('edit'+id).style.display = 'none';
+				document.getElementById('chk'+id).checked = false;
+				document.getElementById('chk'+id).setAttribute('name', 'off');
+			}
+		}
 	</script>
 </body>
 </html>
