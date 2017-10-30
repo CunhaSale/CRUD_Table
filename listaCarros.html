@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Exemplo</title>
+	<title>Tabela de Carros</title>
 	<link rel="stylesheet" type="text/css" href="lib/bootstrap/css/bootstrap.css">
 	<style type="text/css">
 		li{list-style: none; box-sizing: border-box;}
@@ -40,15 +40,14 @@
 	<script type="text/javascript">
 		var arrCarros = [];
 		var carro;
-		var contadorIdTr = 0;
-		var contadorIdChk = 0;
+		var contadorId = 0;
 
 		var criarCarro = function(marca, modelo){
 			var check = document.createElement("INPUT"); 
 				check.setAttribute('type', 'checkbox'); 
 				check.setAttribute('style', 'float: right;');
-				check.setAttribute('id', 'chk'+contadorIdChk);
-				check.setAttribute('onclick', 'editar('+contadorIdChk+')');
+				check.setAttribute('id', 'chk'+contadorId);
+				check.setAttribute('onclick', 'editar('+contadorId+')');
 				check.setAttribute('name', 'off');
 			return{
 				marca: marca,
@@ -59,22 +58,22 @@
 
 		var novo = function(){
 			var tBody = document.getElementById('tBody');
-			var row = document.createElement('tr'); row.setAttribute("id", "trow"+contadorIdTr);
+			var row = document.createElement('tr'); row.setAttribute("id", "trow"+contadorId);
 			var tdMarca = document.createElement("td");
 			var tdModelo = document.createElement("td");
-			var tdEditar = document.createElement("td"); tdEditar.setAttribute('id', 'tdCheck'+contadorIdTr);
+			var tdEditar = document.createElement("td"); tdEditar.setAttribute('id', 'tdCheck'+contadorId);
 			var marca = document.getElementById("marca").value;
 			var modelo = document.getElementById("modelo").value;
 			//
-			var editar = document.createElement('a'); editar.setAttribute('id', 'edit'+contadorIdTr);
-			var editarValue = document.createTextNode('Editar');
+			var editar = document.createElement('a'); editar.setAttribute('id', 'edit'+contadorId);
+			var editarTextNode = document.createTextNode('Editar');
 				editar.setAttribute('href', '#');
 				editar.setAttribute('name', 'off');
 				editar.setAttribute('style', 'float: left');
 				editar.setAttribute('class', 'edit');
-				editar.setAttribute('onclick', 'editarCampo('+contadorIdTr+')');
+				editar.setAttribute('onclick', 'editarCampo('+contadorId+')');
 
- 			editar.appendChild(editarValue);
+ 			editar.appendChild(editarTextNode);
 			tBody.appendChild(row);
 			tdEditar.appendChild(editar);
 			
@@ -85,20 +84,19 @@
 				for (var i = 0; i < arrCarros.length; i++){
 			  		carro = arrCarros[i];
 			  	}
-			  	tdMarca.setAttribute('id', 'tdMarca'+contadorIdTr);
-			  	tdModelo.setAttribute('id', 'tdModelo'+contadorIdTr);
+			  	tdMarca.setAttribute('id', 'tdMarca'+contadorId);
+			  	tdModelo.setAttribute('id', 'tdModelo'+contadorId);
 				tdMarca.appendChild(document.createTextNode(carro.marca));
 				tdModelo.appendChild(document.createTextNode(carro.modelo));
 				tdEditar.appendChild(carro.editar);
 
-			  	document.getElementById("trow"+contadorIdTr).appendChild(tdMarca);
-			  	document.getElementById("trow"+contadorIdTr).appendChild(tdModelo);
-			  	document.getElementById("trow"+contadorIdTr).appendChild(tdEditar);
+			  	document.getElementById("trow"+contadorId).appendChild(tdMarca);
+			  	document.getElementById("trow"+contadorId).appendChild(tdModelo);
+			  	document.getElementById("trow"+contadorId).appendChild(tdEditar);
 			}
 			document.getElementById("marca").value = "";
 		    document.getElementById("modelo").value = "";
-	   	    contadorIdTr++;
-		    contadorIdChk++;
+	   	    contadorId++;
 		};
 
 		var checkAll = function(){
@@ -123,7 +121,9 @@
 		var excluirCarro = function(){
 			for (var w = 0; w < arrCarros.length; w++){
 				if(document.getElementById('chk'+w).name === 'on'){
-					console.log(arrCarros.indexOf(arrCarros[w]));
+					document.getElementById('trow'+w).style.display = 'none';
+						//document.getElementById('chk'+w).setAttribute('name', 'off');
+						//arrCarros.splice(arrCarros.lastIndexOf(arrCarros[w]), 1);
 				};
 			};
 		};
@@ -133,6 +133,7 @@
 			var campoModelo = document.getElementById('tdModelo'+id).innerHTML;
 			if (document.getElementById('edit'+id).name === 'off'){
 				document.getElementById('tdMarca'+id).setAttribute('contenteditable', true);
+				document.getElementById('tdMarca'+id).focus();
 				document.getElementById('trow'+id).setAttribute('style', 'background-color: #FFF5EE');
 				document.getElementById('tdModelo'+id).setAttribute('contenteditable', true);
 				document.getElementById('edit'+id).childNodes[0].nodeValue = 'OK';
@@ -140,7 +141,6 @@
 			}else if (campoMarca === '' | campoModelo ===''){ 
 					alert("Você deve preencher os campos: Marca e Modelo");
 			}else{
-				//arrCarros.splice(arrCarros.indexOf(arrCarros[i]), 1, campoMarca);
 				document.getElementById('tdMarca'+id).setAttribute('contenteditable', false);
 				document.getElementById('trow'+id).setAttribute('style', 'background-color: #fff');
 				document.getElementById('tdModelo'+id).setAttribute('contenteditable', false);
